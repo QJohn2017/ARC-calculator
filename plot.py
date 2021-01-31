@@ -21,7 +21,7 @@ def plot_absorption_spectra():
     fig = plt.figure()
     ax = plt.axes()
 
-    #### Data format of file "transition.dat" ####
+    #### Data format of file "absorption.dat" ####
     # idx 0: n1 | idx 1: l1 | idx 2: j1 | idx 3: mj1
     # idx 4: n2 | idx 5: l2 | idx 6: j2 | idx 7: mj2
     # idx 8: frequency (THz)
@@ -82,10 +82,12 @@ def plot_spontaneous_transition_diagram():
                             (data_levl[:,1]==l_lower) &
                             (data_levl[:,2]==j_lower)][0][3]
         rate = spon[8]
-        if rate > 1e6:
+        if rate > 1e7:
             ax.plot([l_upper, l_lower], [E_upper, E_lower], lw=8)
+        elif rate > 1e6 and rate <= 1e7:
+            ax.plot([l_upper, l_lower], [E_upper, E_lower], lw=4)
         else:
-            ax.plot([l_upper, l_lower], [E_upper, E_lower], lw=rate/1e6)
+            ax.plot([l_upper, l_lower], [E_upper, E_lower], lw=4*rate/1e6)
     ax.set_xlabel("l number")
     ax.set_ylabel("Energy (eV)")
     ax.set_title("Transition diagram of spontaneous radiation")
@@ -134,7 +136,7 @@ def plot_spontaneous_rate():
         else:
             ax.hlines(high_level[3], high_level[1]-0.2, high_level[1]+0.2, lw=life_time/2e3)
         ax.text(high_level[1]+0.2, high_level[3], "%d%s%3.1f" % \
-            (high_level[0], l_notion(int(high_level[1])), high_level[2]))    
+            (high_level[0], l_notion[int(high_level[1])], high_level[2]))    
 
     plot_rate(10, 1, 1.5)
     plt.show()
